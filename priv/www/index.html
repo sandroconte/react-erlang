@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>Sticky Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://fb.me/react-0.14.2.js"></script>
+    <script src="https://fb.me/react-dom-0.14.2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript">
+        var calendar = {};
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="#" class="navbar-brand">Program MeetUp</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button href="#" class="text-success"><span class="glyphicon glyphicon-plus"></span> Add</button></li>
+                        <li><button href="#" class="text-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <div class="col-md-4">.col-md-1</div>
+            <div class="col-md-8" id="calendar" style="padding: 0px;">
+                <div class="row" id="period">
+                    <div class="col-md-4"><h1 class="text-center" id="month"></h1></div>
+                    <div class="col-md-4"><h1 class="text-center" id="year"></h1></div>
+                    <div class="col-md-4">
+                        <div class="btn-group action_month pull-right" role="group" id="action_month">
+                            <button type="button" class="btn btn-default" onclick="calendar.setmonth(-1);">Prev</button>
+                            <button type="button" class="btn btn-default" onclick="calendar.setmonth(1);">Next</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="days" id="days"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/babel" src="js/index.js"></script>
+</body>
+</html>

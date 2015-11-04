@@ -1,0 +1,9 @@
+%% -*- erlang -*-
+{application, stickynotes,
+ [{description, "stickynotes"},
+  {vsn, "0.1"},
+  {modules, []},
+  {registered, []},
+  {mod, {'stickynotes_app', []}},
+  {env, []},
+  {applications, [kernel, stdlib, crypto]}]}.
