@@ -47,7 +47,7 @@ loop(Req, DocRoot) ->
                         Req:not_found()
                 end;
             _ ->
-                Req:respond({501, [], []})
+              Req:respond({501, [], []})
         end
     catch
         Type:What ->
