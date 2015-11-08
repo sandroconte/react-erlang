@@ -5,4 +5,4 @@ exec erl \
     -sname stickynotes_dev \
     -s stickynotes \
     -s reloader \
-    -mnesia '"db"'
+    -mnesia dir '"db/dev"' $1

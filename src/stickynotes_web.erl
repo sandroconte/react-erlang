@@ -36,9 +36,10 @@ loop(Req, DocRoot) ->
                 case Path of
                   "notes" ->
                     Data = Req:parse_post(),
-                    Json = proplist:get_value("json", Data),
+                    Json = proplists:get_value("json", Data),
                     Struct = mochijson2:decode(Json),
-                    Action = list_to_atom(Struct:get_value(<<"action">>, Json)),
+                    A = struct:get_value(<<"action">>, Struct),
+                    Action = list_to_existing_atom(binary_to_list(A)),
                     Result = notes:Action(Struct),
                     Response = mochijson2:encode(Result),
                     Req:ok({"applicaziont/json", [], [Response]});

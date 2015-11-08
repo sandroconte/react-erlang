@@ -91,3 +91,29 @@ var Day = React.createClass({
 });
 
 ReactDOM.render(<Day/>, document.getElementById('days'));
+
+var Task = React.createClass({
+    handleSubmit: function(event){
+        event.preventDefault();
+        var json = JSON.stringify({"action": "create", "doc": {"title": this.refs.title.value, "text": this.refs.text.value}});
+        $.post("/notes", {"json": json}, function(response){
+            console.log(response);
+        }, "json");
+    },
+    render: function(){
+        return (<form className="taskform" ref="taskform" role="form" onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <input placeholder="Title" name="title" ref="title" className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <textarea placeholder="Text" name="text" ref="text" className="form-control" />
+                    </div>
+                    <button type="submit" className="btn btn-default">Save</button>
+                </form>)
+    }
+});
+
+document.getElementById("addtask").addEventListener("click", function(){
+    $(this).hide();
+    ReactDOM.render(<Task/>, document.getElementById('tasklist'));
+});

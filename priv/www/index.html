@@ -2,6 +2,7 @@
 <head>
     <title>Sticky Notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://fb.me/react-0.14.2.js"></script>
     <script src="https://fb.me/react-dom-0.14.2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
@@ -25,15 +26,20 @@
                     <a href="#" class="navbar-brand">Program MeetUp</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><button href="#" class="text-success"><span class="glyphicon glyphicon-plus"></span> Add</button></li>
+                    <!--ul class="nav navbar-nav navbar-right">
+                        <li>
                         <li><button href="#" class="text-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button></li>
-                    </ul>
+                    </ul -->
                 </div>
             </div>
         </nav>
         <div>
-            <div class="col-md-4">Add task</div>
+            <div class="col-md-4">
+                <button id="addtask" class="text-success addtask btnaction">
+                    <span class="glyphicon glyphicon-plus"></span> Add
+                </button>
+                <div id="tasklist"></div>
+            </div>
             <div class="col-md-8" id="calendar" style="padding: 0px;">
                 <div class="row" id="period">
                     <div class="col-md-4"><h1 class="text-center" id="month"></h1></div>
