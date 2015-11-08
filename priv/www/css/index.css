@@ -1,4 +1,4 @@
-.btnaction{ display: block; border: 0px; padding: 1em; background: none; cursor: pointer;}
+
 .action_month{margin-top: 11%;}
 .days{margin-top: 10px; border-width: 0px 0px 1px 1px; position: relative; overflow: hidden;}
 .days, .days .col-md-2{border-color: #ccc; border-style: solid; }
@@ -7,3 +7,5 @@
 .days .col-md-2 .row{padding: 0.3em;}
 .days h4{height: 2em; margin: 0px; font-size: 1.5em;}
 .days h5{font-weight: normal; font-size: 1em;}
+
+.tasklist h4{color: #0d4e7e; font-weight: normal; text-transform: capitalize;}

@@ -56,6 +56,29 @@ calendar = {
     }
 }
 
+tasks = {
+    init: function(){
+        var self = this;
+        $.post("/notes", {"json": JSON.stringify({"action": "read_all"})}, function(response){
+            var sortable = [];
+            $.each(response, function(i){
+                sortable.push([this.id, this.doc]);
+            });
+            sortable.sort(function(a, b) {return b[0] - a[0]});
+            self.render(sortable, "read_all");
+        }, "json");
+    },
+    render: function(obj, action, pk){
+        switch (action){
+            case "read_all":
+                ReactDOM.render(<TaskList items={obj} />, document.getElementById("tasklist"));
+
+            break;
+        }
+    }
+}.init();
+
+
 var Cell = React.createClass({
     render: function(){
         return (
@@ -108,10 +131,29 @@ var Task = React.createClass({
                     <div className="form-group">
                         <textarea placeholder="Text" name="text" ref="text" className="form-control" />
                     </div>
-                    <button type="submit" className="btn btn-default">Save</button>
-                </form>)
+                    <button type="button" className="btn btn-default btn-block" ref="cancel">
+                        <span className="glyphicon glyphicon-hand-left" aria-hidden="true"></span> Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary btn-block">
+                        <span className="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+                    </button>
+        </form>)
     }
 });
+
+var TaskList = React.createClass({
+    render: function() {
+        return (<div className="list-group">{this.props.items.map(function (result, i) {
+            return (
+                <div className="list-group-item" key={"task_"+result[0]}>
+                    <input type="hidden" value={result[0]} ref={"task_"+result[0]}/>
+                    <h4 className="list-group-item-heading">{result[1].title}</h4>
+                    <p className="list-group-item-text">{result[1].text}</p>
+                </div>
+            )
+        })
+        }</div>);
+    }});
 
 document.getElementById("addtask").addEventListener("click", function(){
     $(this).hide();

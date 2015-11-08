@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/index.css">
     <script type="text/javascript">
         var calendar = {};
+        var tasks = {};
     </script>
 </head>
 <body>
@@ -35,10 +36,11 @@
         </nav>
         <div>
             <div class="col-md-4">
-                <button id="addtask" class="text-success addtask btnaction">
-                    <span class="glyphicon glyphicon-plus"></span> Add
-                </button>
-                <div id="tasklist"></div>
+                <div class="padding" style="margin-top: 2em;"></div>
+                    <button id="addtask" class="btn btn-success btn-block">
+                        <span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                <div id="tasklist" class="tasklist" style="margin: 2em 0;"></div>
             </div>
             <div class="col-md-8" id="calendar" style="padding: 0px;">
                 <div class="row" id="period">
