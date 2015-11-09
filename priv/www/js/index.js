@@ -6,7 +6,8 @@ Date.prototype.getToday = function(month,year) {
     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
 }
 var date = new Date();
-calendar = {
+
+var calendar = {
     today: date.getDate(),
     day: date.getDay(),
     month: date.getMonth(),
@@ -56,28 +57,74 @@ calendar = {
     }
 }
 
-tasks = {
+function datenow (){
+    var date = new Date();
+    document.getElementById("datenow").innerHTML = date.getHours() + " : " + date.getMinutes();
+}
+datenow();
+setInterval(function(){
+    datenow();
+}, 60000);
+
+
+var tasks = {
     init: function(){
         var self = this;
         $.post("/notes", {"json": JSON.stringify({"action": "read_all"})}, function(response){
-            var sortable = [];
-            $.each(response, function(i){
-                sortable.push([this.id, this.doc]);
-            });
-            sortable.sort(function(a, b) {return b[0] - a[0]});
-            self.render(sortable, "read_all");
+            var sortable = self.sortList(response);
+            self.render(sortable, "select");
+            self.list = sortable;
         }, "json");
     },
+    list:[],
+    addToList: function(obj){
+        this.list.unshift([obj[0]["Id"], obj[0]["doc"]]);
+    },
+    getList: function(){
+        return this.list;
+    },
+    sortList: function(obj){
+        var sortable = [];
+        $.each(obj, function(i){
+            sortable.push([this.id, this.doc]);
+        });
+        sortable.sort(function(a, b) {return b[0] - a[0]});
+        return sortable;
+    },
+    indexof: function(pk){
+        var find = -1;
+        for (var i=0; find < 0 && i < this.list.length; i++){
+            if (this.list[i][0] == pk){
+                find = i;
+            }
+        }
+        return find;
+    },
+    removeToList: function(pk){
+        var index = this.indexof(pk);
+        if (index > -1) {
+            this.list.splice(index, 1);
+        }
+    },
     render: function(obj, action, pk){
+        var self = this;
         switch (action){
-            case "read_all":
+            case "select":
                 ReactDOM.render(<TaskList items={obj} />, document.getElementById("tasklist"));
-
+            break;
+            case "prepend":
+                self.addToList(obj);
+                ReactDOM.render(<TaskList items={self.getList()} />, document.getElementById("tasklist"));
+            break;
+            case "remove":
+                console.log(0);
+                self.removeToList(pk);
+                ReactDOM.render(<TaskList items={self.getList()} />, document.getElementById("tasklist"));
             break;
         }
     }
-}.init();
-
+}
+tasks.init();
 
 var Cell = React.createClass({
     render: function(){
@@ -116,22 +163,29 @@ var Day = React.createClass({
 ReactDOM.render(<Day/>, document.getElementById('days'));
 
 var Task = React.createClass({
+    handleCancel: function(){
+        $("#addtask").show();
+        $("#taskform").empty();
+    },
     handleSubmit: function(event){
         event.preventDefault();
         var json = JSON.stringify({"action": "create", "doc": {"title": this.refs.title.value, "text": this.refs.text.value}});
+        var self = this;
         $.post("/notes", {"json": json}, function(response){
-            console.log(response);
+            tasks.render(response, "prepend");
+            self.handleCancel();
         }, "json");
+
     },
     render: function(){
-        return (<form className="taskform" ref="taskform" role="form" onSubmit={this.handleSubmit}>
+        return (<form ref="taskform" role="form" onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <input placeholder="Title" name="title" ref="title" className="form-control" />
                     </div>
                     <div className="form-group">
                         <textarea placeholder="Text" name="text" ref="text" className="form-control" />
                     </div>
-                    <button type="button" className="btn btn-default btn-block" ref="cancel">
+                    <button type="button" className="btn btn-default btn-block" onClick={this.handleCancel}>
                         <span className="glyphicon glyphicon-hand-left" aria-hidden="true"></span> Cancel
                     </button>
                     <button type="submit" className="btn btn-primary btn-block">
@@ -142,20 +196,33 @@ var Task = React.createClass({
 });
 
 var TaskList = React.createClass({
+    handleDelete: function(pk){
+        $.post("/notes", {"json": JSON.stringify({"action": "delete", "id": pk})}, function(response){
+            if (response["message"] == "ok"){
+                tasks.render(null, "remove", pk);
+            }
+        });
+    },
     render: function() {
+        var handleDelete = this.handleDelete;
         return (<div className="list-group">{this.props.items.map(function (result, i) {
             return (
                 <div className="list-group-item" key={"task_"+result[0]}>
-                    <input type="hidden" value={result[0]} ref={"task_"+result[0]}/>
-                    <h4 className="list-group-item-heading">{result[1].title}</h4>
+                    <div className="col-md-9"><h4 className="list-group-item-heading">{result[1].title}</h4></div>
+                    <div className="col-md-3">
+                        <button onClick={this.handleDelete.bind(this, result[0])} className="btn btn-sm btn-danger">
+                            <span className="glyphicon glyphicon-trash"></span>
+                            delete
+                        </button>
+                    </div>
                     <p className="list-group-item-text">{result[1].text}</p>
                 </div>
-            )
-        })
-        }</div>);
+            );
+        }, this)}
+        </div>);
     }});
 
 document.getElementById("addtask").addEventListener("click", function(){
     $(this).hide();
-    ReactDOM.render(<Task/>, document.getElementById('tasklist'));
+    ReactDOM.render(<Task/>, document.getElementById('taskform'));
 });

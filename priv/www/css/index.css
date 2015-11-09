@@ -8,4 +8,5 @@
 .days h4{height: 2em; margin: 0px; font-size: 1.5em;}
 .days h5{font-weight: normal; font-size: 1em;}
 
+.tasklist { max-height: 50%; overflow: auto;}
 .tasklist h4{color: #0d4e7e; font-weight: normal; text-transform: capitalize;}
